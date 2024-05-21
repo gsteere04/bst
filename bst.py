@@ -92,9 +92,13 @@ class BST:
         return self._count_leaves(node.left) + self._count_leaves(node.right)
 
     def serialize(self) -> str:
-        return ','.join(map(str, self.in_order_traversal()))
+        result = []
+        self._pre_order_traversal(self.root, result)
+        return ','.join(map(str, result))
+    
+    def deserialize(self, data: str) -> None:
+        if not data:
+            return
+        values = list(map(int, data.split(',')))
+        self.root = self._deserialize_helper(values)
 
-    def deserialize(self, tree: str) -> None:
-        self.root = None
-        for val in tree.split(','):
-            self.insert(int(val))
