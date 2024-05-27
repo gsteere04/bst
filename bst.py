@@ -93,12 +93,23 @@ class BST:
 
     def serialize(self) -> str:
         result = []
-        self._pre_order_traversal(self.root, result)
+        self._in_order_traversal(self.root, result)
         return ','.join(map(str, result))
-    
+
     def deserialize(self, data: str) -> None:
         if not data:
+            self.root = None
             return
         values = list(map(int, data.split(',')))
-        self.root = self._deserialize_helper(values)
+        self.root = self._deserialize(values, 0, len(values) - 1)
+
+    def _deserialize(self, values, start, end):
+        if start > end:
+            return None
+        mid = (start + end) // 2
+        node = TreeNode(values[mid])
+        node.left = self._deserialize(values, start, mid - 1)
+        node.right = self._deserialize(values, mid + 1, end)
+        return node
+
 
